@@ -1,0 +1,591 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using a Git submodule as Maven parent project - koraktor's $stdout</title>
+  <meta name="author" content="Sebastian Staudt">
+
+  
+  <meta name="description" content="This hint is especially useful if you have two Maven projects – a parent
+project and a child project depending on it – on which you want to develop &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stdout.koraktor.de/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="koraktor's $stdout" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-258817-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">koraktor's $stdout</a></h1>
+  
+    <h2>Random snippets about programming and more</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stdout.koraktor.de" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using a Git Submodule as Maven Parent Project</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-15T00:00:00+02:00" pubdate data-updated="true">Apr 15<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This hint is especially useful if you have two Maven projects – a parent
+project and a child project depending on it – on which you want to develop
+concurrently.</p>
+
+<!-- more -->
+
+<p>The directory structure will look like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">_
+</span><span class="line"> \
+</span><span class="line">  project
+</span><span class="line">  |
+</span><span class="line">  |--.git--...
+</span><span class="line">  |
+</span><span class="line">  |--parent
+</span><span class="line">  |  |
+</span><span class="line">  |  |--.git--...
+</span><span class="line">  |  |
+</span><span class="line">  |  |--src
+</span><span class="line">  |  |  |
+</span><span class="line">  |  |  |--main
+</span><span class="line">  |  |  |  |
+</span><span class="line">  |  |  |  |--java--...
+</span><span class="line">  |  |  |  \--resources--...
+</span><span class="line">  |  |  |
+</span><span class="line">  |  |  \--test
+</span><span class="line">  |  |     |
+</span><span class="line">  |  |     |--java--...
+</span><span class="line">  |  |     \--resources--...
+</span><span class="line">  |  |
+</span><span class="line">  |  \--pom.xml
+</span><span class="line">  |
+</span><span class="line">  |--src
+</span><span class="line">  |  |
+</span><span class="line">  |  |--main
+</span><span class="line">  |  |  |
+</span><span class="line">  |  |  |--java-...
+</span><span class="line">  |  |  \--resources-...
+</span><span class="line">  |  |
+</span><span class="line">  |  \--test
+</span><span class="line">  |     |
+</span><span class="line">  |     |--java-...
+</span><span class="line">  |     \--resources-...
+</span><span class="line">  |
+</span><span class="line">  |--.gitmodules
+</span><span class="line">  \--pom.xml</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The most important part in the child project’s POM is assigning the parent
+project to the subfolder <code>parent</code> instead of using an installed artifact:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span /></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;project</span> <span class="err">...</span><span class="nt">&gt;</span>
+</span><span class="line">
+</span><span class="line">    ...
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;parent&gt;</span>
+</span><span class="line">        <span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">        <span class="nt">&lt;artifactId&gt;</span>parent<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">        <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+</span><span class="line">        <span class="nt">&lt;relativePath&gt;</span>parent<span class="nt">&lt;/relativePath&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/parent&gt;</span>
+</span><span class="line">
+</span><span class="line">    ...
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/project&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>What we have now, is a combination of two projects – called <code>project</code> and
+<code>parent</code>. Both reside in Git repositories, where <code>parent</code> is a submodule of
+<code>project</code>. On the Maven part, <code>project</code> inherits its POM – the so called super
+POM – from inside the folder <code>parent</code>. At this point, we have a basic setup
+where we can work on both projects, each in its own repository and the one
+inheriting from the other. <em>Basic</em> setup, because if you don’t do anything
+special in <code>parent</code>’s POM, you will only inherit dependencies and the
+like from this super POM. If you want to use code and files from the parent
+project, you’ll have to do a some more configuration in the parent POM.</p>
+
+<p>Also inheriting sources and resources requires a bit more work. The following
+snippet of the parent POM will allow the child project to use the most common
+source and resource files for runtime and tests from <code>parent</code>:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span /></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+<span class="line-number">65</span>
+<span class="line-number">66</span>
+<span class="line-number">67</span>
+<span class="line-number">68</span>
+<span class="line-number">69</span>
+<span class="line-number">70</span>
+<span class="line-number">71</span>
+<span class="line-number">72</span>
+<span class="line-number">73</span>
+<span class="line-number">74</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;project</span> <span class="err">...</span><span class="nt">&gt;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;artifactId&gt;</span>parent<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+</span><span class="line">    <span class="nt">&lt;packaging&gt;</span>pom<span class="nt">&lt;/packaging&gt;</span>
+</span><span class="line">
+</span><span class="line">    ...
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;build&gt;</span>
+</span><span class="line">        <span class="nt">&lt;resources&gt;</span>
+</span><span class="line">            <span class="nt">&lt;resource&gt;</span>
+</span><span class="line">                <span class="nt">&lt;directory&gt;</span>parent/src/main/resources<span class="nt">&lt;/directory&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/resource&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/resources&gt;</span>
+</span><span class="line">
+</span><span class="line">        <span class="nt">&lt;testResources&gt;</span>
+</span><span class="line">            <span class="nt">&lt;testResource&gt;</span>
+</span><span class="line">                <span class="nt">&lt;directory&gt;</span>parent/src/test/resources<span class="nt">&lt;/directory&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/testResource&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/testResources&gt;</span>
+</span><span class="line">
+</span><span class="line">        <span class="nt">&lt;pugins&gt;</span>
+</span><span class="line">            <span class="nt">&lt;plugin&gt;</span>
+</span><span class="line">                <span class="nt">&lt;groupId&gt;</span>org.codehaus.mojo<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">                <span class="nt">&lt;artifactId&gt;</span>build-helper-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">                <span class="nt">&lt;version&gt;</span>1.5<span class="nt">&lt;/version&gt;</span>
+</span><span class="line">                <span class="nt">&lt;executions&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;execution&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;id&gt;</span>add-source<span class="nt">&lt;/id&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;phase&gt;</span>generate-sources<span class="nt">&lt;/phase&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;goals&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;goal&gt;</span>add-source<span class="nt">&lt;/goal&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;sources&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;source&gt;</span>${basedir}/parent/src/main/java<span class="nt">&lt;/source&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;/sources&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/configuration&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;execution&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;id&gt;</span>add-test-resource<span class="nt">&lt;/id&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;phase&gt;</span>generate-test-resources<span class="nt">&lt;/phase&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;goals&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;goal&gt;</span>add-test-resource<span class="nt">&lt;/goal&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;resources&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;resource&gt;</span>
+</span><span class="line">                                    <span class="nt">&lt;directory&gt;</span>${basedir}/parent/src/test/resources<span class="nt">&lt;/directory&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;/resource&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;/resources&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/configuration&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;execution&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;id&gt;</span>add-test-source<span class="nt">&lt;/id&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;phase&gt;</span>generate-test-sources<span class="nt">&lt;/phase&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;goals&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;goal&gt;</span>add-test-source<span class="nt">&lt;/goal&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;sources&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;source&gt;</span>${basedir}/parent/src/test/java<span class="nt">&lt;/source&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;/sources&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/configuration&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class="line">                <span class="nt">&lt;/executions&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/plugin&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/plugins&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/build&gt;</span>
+</span><span class="line">
+</span><span class="line">    ....
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/project&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>There are a few things you should know about this POM code:</p>
+
+<ol>
+  <li>The code here will be interpreted from the child project. That’s why all
+file references are using <code>${basedir}/parent</code> as the base directory.</li>
+  <li>You could also do this in the child projects POM. This will work exactly
+the same, but you would have to do this in every project inheriting from
+<code>parent</code>. There might be cases where this is desired, but usually it’s best
+to do this in the parent POM.</li>
+  <li>More complex projects – e.g. using generated source file, web applications
+and the like – require more complex configuration. As a rule of thumb
+there’s one thing to remember: The child project needs to know all files in
+the parent project that should be inherited. Sometimes there’s a built-in
+way to to this like <code>&lt;resources&gt;</code>, sometimes you’ll have to use a plugin
+like <code>org.codehaus.mojo:build-helper-maven-plugin</code> above.</li>
+</ol>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>It’s pretty obvious that Maven wasn’t created with Git submodules in mind, but
+this solution works quite well and I’m using it for a pretty big web
+application at work. There I have a custom framework for standard web
+applications and a web application that inherits from it. Building a new web
+application is quite easy: create a new Git repository, create a POM for the
+web application, include the framework submodule, use it as parent POM, build,
+done – at least when it comes to a working (although useless) web application.
+:)</p>
+
+<p>The most positive part of this layout is that you can add or fix things in the
+parent project without the need to build and install another artifact for
+<code>parent</code> before building the main project. It helps a lot to build up momentum
+in application development.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Staudt</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-15T00:00:00+02:00" pubdate data-updated="true">Apr 15<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/maven/'>maven</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stdout.koraktor.de/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/" data-via="k0raktor" data-counturl="http://stdout.koraktor.de/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/" title="Previous Post: Ruby: Calling super constructors from multiple included modules">&laquo; Ruby: Calling super constructors from multiple included modules</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights/" title="Next Post: 3² = 9: 3 years, 3 programming languages, 9 insights">3² = 9: 3 years, 3 programming languages, 9 insights &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights/">3² = 9: 3 years, 3 programming languages, 9 insights</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/">Using a Git submodule as Maven parent project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/">Ruby: Calling super constructors from multiple included modules</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/02/using-git-as-a-backup-tool/">Using Git as a backup tool</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/08/16/continuous-integration-using-git/">Continuous integration using Git</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("k0raktor", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/k0raktor" class="twitter-follow-button" data-show-count="false">Follow @k0raktor</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109586181974940228820?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Sebastian Staudt -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Highlighting Git "syntax" with nano - koraktor's $stdout</title>
+  <meta name="author" content="Sebastian Staudt">
+
+  
+  <meta name="description" content="Using nano as your default editor for Git? Always wanted to have funky syntax
+highlighting just like that for Vim (e.g. shipped with msysgit). Here’s &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stdout.koraktor.de/blog/2010/08/15/highlighting-git-syntax-with-nano">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="koraktor's $stdout" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-258817-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">koraktor's $stdout</a></h1>
+  
+    <h2>Random snippets about programming and more</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stdout.koraktor.de" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Highlighting Git "Syntax" With Nano</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-15T00:00:00+02:00" pubdate data-updated="true">Aug 15<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Using nano as your default editor for Git? Always wanted to have funky syntax
+highlighting just like that for Vim (e.g. shipped with msysgit).</p>
+
+<!-- more -->
+
+<p>Here’s a nanorc configuration file to enable syntax highlighting in nano:</p>
+
+<div><script src="https://gist.github.com/525257.js?file="></script>
+<noscript><pre><code># This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+
+# A nano configuration file to enable syntax highlighting of some Git specific
+# files with the GNU nano text editor (http://www.nano-editor.org)
+#
+# Save this file to a directory of your choice and add it to your nanorc using
+# include ${PATH_TO_THE_FILE}/git.nanorc
+
+# This syntax format is used for editing commit and tag messages
+syntax &quot;git commit/tag messages&quot; &quot;COMMIT_EDITMSG|TAG_EDITMSG&quot;
+
+# Commit message
+color white &quot;.*&quot;
+
+# Subject line (This is pretty weird, but it works at least for OS X' nano 2.0.6)
+color brightcyan start=&quot;^&quot; end=&quot;$&quot;
+
+# Comments
+color brightblack &quot;^#.*&quot;
+
+# Files changes
+color white       &quot;#[[:space:]](deleted|modified|new file|renamed):[[:space:]].*&quot;
+color red         &quot;#[[:space:]]deleted:&quot;
+color green       &quot;#[[:space:]]modified:&quot;
+color brightgreen &quot;#[[:space:]]new file:&quot;
+color brightblue  &quot;#[[:space:]]renamed:&quot;
+
+# Recolor hash symbols
+color brightblack &quot;#&quot;
+
+# Trailing spaces
+color ,red &quot;[[:space:]]+$&quot;
+              
+# This syntax format is used for interactive rebasing                 
+syntax &quot;git rebase todo&quot; &quot;git-rebase-todo&quot;
+
+# Default
+color white &quot;.*&quot;
+
+# Comments
+color brightblack &quot;^#.*&quot;
+
+# Commit IDs
+color brightwhite &quot;[0-9a-f]{7,40}&quot;
+
+# Rebase commands
+color green       &quot;^(e|edit) [0-9a-f]{7,40}&quot;
+color green       &quot;^#  (e, edit)&quot;
+color brightgreen &quot;^(f|fixup) [0-9a-f]{7,40}&quot;
+color brightgreen &quot;^#  (f, fixup)&quot;
+color brightwhite &quot;^(p|pick) [0-9a-f]{7,40}&quot;
+color brightwhite &quot;^#  (p, pick)&quot;
+color blue        &quot;^(r|reword) [0-9a-f]{7,40}&quot;
+color blue        &quot;^#  (r, reword)&quot;
+color brightred   &quot;^(s|squash) [0-9a-f]{7,40}&quot;
+color brightred   &quot;^#  (s, squash)&quot;
+color yellow      &quot;^(x|exec) [^ ]+ [0-9a-f]{7,40}&quot;
+color yellow      &quot;^#  (x &lt;cmd&gt;, exec &lt;cmd&gt;)&quot;
+
+# Recolor hash symbols
+color brightblack &quot;#&quot;
+</code></pre></noscript></div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Staudt</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-15T00:00:00+02:00" pubdate data-updated="true">Aug 15<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/programming/'>programming</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stdout.koraktor.de/blog/2010/08/15/highlighting-git-syntax-with-nano/" data-via="k0raktor" data-counturl="http://stdout.koraktor.de/blog/2010/08/15/highlighting-git-syntax-with-nano/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/08/11/a-word-on-ides/" title="Previous Post: A word on IDEs">&laquo; A word on IDEs</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/08/16/continuous-integration-using-git/" title="Next Post: Continuous integration using Git">Continuous integration using Git &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights/">3² = 9: 3 years, 3 programming languages, 9 insights</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/">Using a Git submodule as Maven parent project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/">Ruby: Calling super constructors from multiple included modules</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/02/using-git-as-a-backup-tool/">Using Git as a backup tool</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/08/16/continuous-integration-using-git/">Continuous integration using Git</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("k0raktor", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/k0raktor" class="twitter-follow-button" data-show-count="false">Follow @k0raktor</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109586181974940228820?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Sebastian Staudt -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

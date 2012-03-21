@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby: Calling super constructors from multiple included modules]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/"/>
+    <updated>2010-10-13T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules</id>
+    <content type="html"><![CDATA[<p>Ruby’s concept of modules and mixins is great. Every Ruby programmer will come
+to this conclusion – sooner or later.</p>
+
+<!-- more -->
+
+<p>There’s only one restriction that you may come across when working extensively
+with modules. Once you included several modules in another module or class you
+might still want to call constructors from multiple of this modules. Sadly
+Ruby’s <code>super</code> keyword won’t help you in this situation as it will only call
+one of the constructors. Once your class inherits from another class and
+includes two modules and you call super inside your class’ constructor, only
+<code>initialize</code> of the lastly included module will be called.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>Depending on your class and module hierarchy this might be completely fine. In
+some cases it’s nice to call multiple constructors<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>, though. Being in a mood
+to experiment, I tried to find the best way to call multiple constructors. The
+following code shows my final solution, which is a pretty simple and clean
+implementation of a “scoped <code>super</code>”.</p>
+
+<p><div><script src='https://gist.github.com/623674.js?file='></script>
+<noscript><pre><code>#!/usr/bin/env ruby
+#
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+
+module HelloWorld
+  def initialize
+    puts 'Hello World!'
+  end
+end
+
+module Weather
+  def initialize(how)
+    puts &quot;The weather is #{how}!&quot;
+  end
+end
+
+class SeeYou
+
+  include HelloWorld
+  include Weather
+
+  def initialize(how, sometime)
+    HelloWorld.instance_method(:initialize).bind(self).call
+    Weather.instance_method(:initialize).bind(self).call(how)
+
+    puts &quot;See you #{sometime}.&quot;
+  end
+
+end
+
+SeeYou.new('nice', 'soon')</code></pre></noscript></div>
+</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Ruby’s <code>super</code> is smart enough to check the arguments of the method
+   candidates it might call, so <code>super</code> might even skip one or more of the
+   super constructors.<a href="#fnref:1" rev="footnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Please note that this also applies to other methods, but it will be most
+   likely required for <code>initialize</code>.<a href="#fnref:2" rev="footnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+</feed>

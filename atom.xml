@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[3² = 9: 3 years, 3 programming languages, 9 insights]]></title>
+    <link href="http://stdout.koraktor.de/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights/"/>
+    <updated>2011-08-18T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights</id>
+    <content type="html"><![CDATA[<p>Back in 2008 I started working on my first open-source project
+<a href="http://koraktor.de/steam-condenser">Steam Condenser</a>. I wanted to do something special, something that people
+would think about “Hey, that’s what I was looking for”. I’ve been a huge fan of
+Valve’s games, playing them myself and hosting a few servers for the German fan
+site <a href="http://www.hlportal.de">Half-Life Portal</a>, but that was before I started working on Steam
+Condenser. I knew there’s some need for libraries to query those game servers.
+Almost any clan has its web page presenting some of their servers, most of the
+time by using hacky PHP snippets out of game forums. So one of the special
+things I’d liked to do, was to create a more professional library: easy to use,
+extend and maintain. Another special would be to not only develop in one
+programming language, I did choose three right away: Java, PHP and Ruby.</p>
+
+<!-- more -->
+
+<p>The result of this three years of work is a stable and feature-rich library
+around Valve’s Steam service, able to query the game servers, the master
+servers and various Steam Community resources. The other result of this three
+years of work is the experience I gained, about the services Steam Condenser
+accesses, about the programming languages I used and about coding and software
+projects in general. The following nine statements are a my conclusion of Steam
+Condenser’s development so far:</p>
+
+<ol>
+  <li>
+    <h4 id="triple-the-languages-is-not-triple-the-work">Triple the languages is not triple the work</h4>
+    <p>Working with three programming languages isn’t easy. They all have their
+distinct features and shortcomings. Nevertheless, most of the work
+incorporated in programming is solving problems, not writing the solution
+down in code. This is especially true for a network and communication
+oriented project like Steam Condenser. The hardest part while working on
+the project was most probably the implementation of the various
+communication protocols which are sparsely documented. After the
+implementation was done for one language it was easy to adapt it to the
+others, especially after I created the basic classes which share a common
+API throughout all three languages. In the end, it’s a matter of adapting
+to different syntaxes and standard libraries.</p>
+  </li>
+  <li>
+    <h4 id="valves-apis-still-need-some-work">Valve’s APIs still need some work</h4>
+    <p>As most of the fans of Valve’s games know, Valve has a quite open and
+mutual relationship to their customers. They even started a wiki for
+developers called <a href="http://developer.valvesoftware.com">Valve Developer Community</a>. Nevertheless, the
+information has to be supplied by Valve at least somewhere before the
+community can document and discuss it in the wiki. The problem is pretty
+obvious for the different protocols used to communicate with the servers:
+The basics have been documented by Valve, but to really get to a point
+where everything works as expected, you need a few special tricks that
+aren’t mentioned anywhere by Valve. So experimenting and discussing with
+others is essential for a project like Steam Condenser.</p>
+  </li>
+  <li>
+    <h4 id="java-verbose-but-solid">Java: Verbose, but solid</h4>
+    <p>The Java port of Steam Condenser started as an experiment in socket
+programming. I did not do lots of Java programming before that, so I did
+learn a lot during the Java development of Steam Condenser. One important
+experience is that you’ll have to write a lot of code, more than in most of
+the other languages I used to date. But this code will be usually work like
+you expected, no pitfalls, no misinterpretations of the API and things like
+that. Java may look like a giant mess if your aren’t used to it, but it’s
+solid and – to an extend – very clean. That’s probably the reason why
+it’s one of the most successful programming languages at the moment,
+especially when it comes to enteprises.</p>
+  </li>
+  <li>
+    <h4 id="ruby-quick-without-being-dirty">Ruby: Quick without being dirty</h4>
+    <p>Ruby was in fact totally new to my when I started to work on Steam
+Condenser. I attended a lecture about Ruby on Rails back than and hadn’t
+done more than Rails samples and exercises. So working on the Ruby
+implementation of a more or less low-level library wasn’t quiet an easy
+start. In retrospect, beginning with a somewhat complex library to learn
+Ruby was some of the best decisions I made in my programming career. I
+learned a lot about Ruby and I learned to love it. Writing Ruby is pure
+fun, even the most complex constructs can written in a few lines of code
+and Ruby’s meta-programming capabilities will probably take your skills to
+a whole new level. Ruby is efficient and while the code might look a bit
+awkward to someone not used to it, it has it’s very own elegance. Another
+huge plus, and this is really huge, is Ruby’s strong and skilled community.
+Rails, Sinatra, Rake, Bundler, RVM, Travis CI… I could list countless
+libraries and tools build with Ruby that not only provide functionality to
+arbitrary users, but they also increased the strength of the community and
+the quality of the code and tools it creates.</p>
+  </li>
+  <li>
+    <h4 id="php-verbose-and-dirty">PHP: Verbose and dirty</h4>
+    <p>Before starting my work on Steam Condenser, I’ve already been an
+experienced PHP programmer, writing web applications and even a quite
+powerful framework for my company. So building Steam Condenser for PHP was
+not that hard for me, although I didn’t use lots of socket programming
+before. After three years working with PHP, Ruby and Java in parallel and
+getting in touch with all those different people using those languages I’ve
+come to a simple conclusion: PHP is a beginner’s language, just like it was
+for me. If you want to write high quality code, it gets extremely verbose
+and reduces readability a lot. The main problem here is that PHP is not
+object-oriented by design. There’s so much of the functional cruft even in
+the newest versions just to maintain backwards compatibility. On the other
+side you’re often confronted with beginner’s questions, for example how
+exception handling works. Don’t get me wrong, I learned a lot while
+programming PHP and I’m sure others did as well. So I don’t think that PHP
+is an inherently bad language, but its patchwork architecture and its
+scattered and discordant ecosystem are some kind of a show-stopper. The
+only advantage in this regard is the good compatibility and acceptance in
+the Windows universe.</p>
+  </li>
+  <li>
+    <h4 id="distributed-version-control-is-not-the-future-its-the-present">Distributed version control is not the future, it’s the present</h4>
+    <p>When starting with Steam Condenser (and all the time before that) I only
+used Subversion (SVN) as the version control for my private, universtity
+and work projects. I knew a bit about CVS and that was enough to not even
+think about using it. Besides of that I wasn’t very interested in version
+control systems. SVN worked well and I saw no obvious reason why to switch
+to a system I didn’t know more than its name. So I stayed with SVN and
+choose Google Code as my host. Later on I worked with several open-source
+projects wich used GitHub as their host. And as I thought that GitHub (see
+below) was way more useful than Google Code I started experimenting with
+Git (see below too). I noticed quickly that working with a DVCS is much
+more elegant and flexible than the centralized way of e.g. SVN. No need to
+setup a server, instant complete backups through clones, no need for
+network access while working, better possibilities to prepare, review and
+rework commits before (!) making them available for others. You see, the
+advantages are countless and after working a lot with Git I can’t imagine
+one downside of a distributed VCS that would justify the use of a
+centralized one.</p>
+  </li>
+  <li>
+    <h4 id="git-is-a-good-choice">Git is a good choice</h4>
+    <p>I’m biased when it comes to choose a good DVCS – just because I never used
+a different DVCS than Git. But with that in mind I can say that Git is easy
+to understand and to handle by someone migrating from a non-distributed
+VCS. And I’d also say that it should be easy to learn by someone who had
+never worked with a VCS ever before. Git’s basics are quite simple to
+learn, but provides additional features like the staging area, stashing and
+rebasing that a experienced Git user will never want to miss again. For
+more information on the advantages of Git see <a href="http://whygitisbetterthanx.com">whygitisbetterthanx.com</a>.</p>
+  </li>
+  <li>
+    <h4 id="github-is-in-fact-social-coding">GitHub is in fact social coding</h4>
+    <p>Like said above I started working with GitHub as a user of other
+open-source projects. It was a fun experience and even the design shows
+clearly that GitHub is not a simple code host as Google Code. This is even
+more true today. GitHub has evolved a lot in the last three years and
+features like the issue tracker and wiki work much better than they did for
+Google Code. And other things like pull requests are real killer features.
+It so easy to get in touch with users and other developers that it’s hard
+to not get truly involved into open-source. I failed and today I’m
+maintining open-source projects and contributing to others.</p>
+  </li>
+  <li>
+    <h4 id="open-source-is-great">Open-Source is great…</h4>
+    <p>… when you can manage to build up a community around your project. This
+is of course a developer’s point of view. As a user, open-source is always
+great. It’s free (at least as free as in beer), its code can be viewed by
+anyone and it can (at least) be altered for own uses. That makes an
+open-source project a lot more valuable to the user. And the user is more
+valuable to the developer. Any suggestion, bug report or other contribution
+– may it be in word or code form – is so important to any software
+project, that there’s no reason to not open-source your code as long as you
+don’t want to sell it.</p>
+  </li>
+</ol>
+
+<p>So that’s it: 3 years of coding in 3 different languages gives 9 conclusions
+about the project and software development in general. It has been a great time
+for me and I’m proud of what has been achieved in this time. I really hope that
+another three years will follow. With DOTA 2 and Counter-Strike: Global
+Offensive on the horizon there’s plenty of chance that Valve will continue to
+work on the Web API and I will try to keep up with Steam Condenser.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using a Git submodule as Maven parent project]]></title>
+    <link href="http://stdout.koraktor.de/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/"/>
+    <updated>2011-04-15T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project</id>
+    <content type="html"><![CDATA[<p>This hint is especially useful if you have two Maven projects – a parent
+project and a child project depending on it – on which you want to develop
+concurrently.</p>
+
+<!-- more -->
+
+<p>The directory structure will look like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">_
+</span><span class="line"> \
+</span><span class="line">  project
+</span><span class="line">  |
+</span><span class="line">  |--.git--...
+</span><span class="line">  |
+</span><span class="line">  |--parent
+</span><span class="line">  |  |
+</span><span class="line">  |  |--.git--...
+</span><span class="line">  |  |
+</span><span class="line">  |  |--src
+</span><span class="line">  |  |  |
+</span><span class="line">  |  |  |--main
+</span><span class="line">  |  |  |  |
+</span><span class="line">  |  |  |  |--java--...
+</span><span class="line">  |  |  |  \--resources--...
+</span><span class="line">  |  |  |
+</span><span class="line">  |  |  \--test
+</span><span class="line">  |  |     |
+</span><span class="line">  |  |     |--java--...
+</span><span class="line">  |  |     \--resources--...
+</span><span class="line">  |  |
+</span><span class="line">  |  \--pom.xml
+</span><span class="line">  |
+</span><span class="line">  |--src
+</span><span class="line">  |  |
+</span><span class="line">  |  |--main
+</span><span class="line">  |  |  |
+</span><span class="line">  |  |  |--java-...
+</span><span class="line">  |  |  \--resources-...
+</span><span class="line">  |  |
+</span><span class="line">  |  \--test
+</span><span class="line">  |     |
+</span><span class="line">  |     |--java-...
+</span><span class="line">  |     \--resources-...
+</span><span class="line">  |
+</span><span class="line">  |--.gitmodules
+</span><span class="line">  \--pom.xml</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The most important part in the child project’s POM is assigning the parent
+project to the subfolder <code>parent</code> instead of using an installed artifact:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span /></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;project</span> <span class="err">...</span><span class="nt">&gt;</span>
+</span><span class="line">
+</span><span class="line">    ...
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;parent&gt;</span>
+</span><span class="line">        <span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">        <span class="nt">&lt;artifactId&gt;</span>parent<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">        <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+</span><span class="line">        <span class="nt">&lt;relativePath&gt;</span>parent<span class="nt">&lt;/relativePath&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/parent&gt;</span>
+</span><span class="line">
+</span><span class="line">    ...
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/project&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>What we have now, is a combination of two projects – called <code>project</code> and
+<code>parent</code>. Both reside in Git repositories, where <code>parent</code> is a submodule of
+<code>project</code>. On the Maven part, <code>project</code> inherits its POM – the so called super
+POM – from inside the folder <code>parent</code>. At this point, we have a basic setup
+where we can work on both projects, each in its own repository and the one
+inheriting from the other. <em>Basic</em> setup, because if you don’t do anything
+special in <code>parent</code>’s POM, you will only inherit dependencies and the
+like from this super POM. If you want to use code and files from the parent
+project, you’ll have to do a some more configuration in the parent POM.</p>
+
+<p>Also inheriting sources and resources requires a bit more work. The following
+snippet of the parent POM will allow the child project to use the most common
+source and resource files for runtime and tests from <code>parent</code>:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span /></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+<span class="line-number">65</span>
+<span class="line-number">66</span>
+<span class="line-number">67</span>
+<span class="line-number">68</span>
+<span class="line-number">69</span>
+<span class="line-number">70</span>
+<span class="line-number">71</span>
+<span class="line-number">72</span>
+<span class="line-number">73</span>
+<span class="line-number">74</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;project</span> <span class="err">...</span><span class="nt">&gt;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;artifactId&gt;</span>parent<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+</span><span class="line">    <span class="nt">&lt;packaging&gt;</span>pom<span class="nt">&lt;/packaging&gt;</span>
+</span><span class="line">
+</span><span class="line">    ...
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;build&gt;</span>
+</span><span class="line">        <span class="nt">&lt;resources&gt;</span>
+</span><span class="line">            <span class="nt">&lt;resource&gt;</span>
+</span><span class="line">                <span class="nt">&lt;directory&gt;</span>parent/src/main/resources<span class="nt">&lt;/directory&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/resource&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/resources&gt;</span>
+</span><span class="line">
+</span><span class="line">        <span class="nt">&lt;testResources&gt;</span>
+</span><span class="line">            <span class="nt">&lt;testResource&gt;</span>
+</span><span class="line">                <span class="nt">&lt;directory&gt;</span>parent/src/test/resources<span class="nt">&lt;/directory&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/testResource&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/testResources&gt;</span>
+</span><span class="line">
+</span><span class="line">        <span class="nt">&lt;pugins&gt;</span>
+</span><span class="line">            <span class="nt">&lt;plugin&gt;</span>
+</span><span class="line">                <span class="nt">&lt;groupId&gt;</span>org.codehaus.mojo<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">                <span class="nt">&lt;artifactId&gt;</span>build-helper-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">                <span class="nt">&lt;version&gt;</span>1.5<span class="nt">&lt;/version&gt;</span>
+</span><span class="line">                <span class="nt">&lt;executions&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;execution&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;id&gt;</span>add-source<span class="nt">&lt;/id&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;phase&gt;</span>generate-sources<span class="nt">&lt;/phase&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;goals&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;goal&gt;</span>add-source<span class="nt">&lt;/goal&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;sources&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;source&gt;</span>${basedir}/parent/src/main/java<span class="nt">&lt;/source&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;/sources&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/configuration&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;execution&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;id&gt;</span>add-test-resource<span class="nt">&lt;/id&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;phase&gt;</span>generate-test-resources<span class="nt">&lt;/phase&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;goals&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;goal&gt;</span>add-test-resource<span class="nt">&lt;/goal&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;resources&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;resource&gt;</span>
+</span><span class="line">                                    <span class="nt">&lt;directory&gt;</span>${basedir}/parent/src/test/resources<span class="nt">&lt;/directory&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;/resource&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;/resources&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/configuration&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;execution&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;id&gt;</span>add-test-source<span class="nt">&lt;/id&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;phase&gt;</span>generate-test-sources<span class="nt">&lt;/phase&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;goals&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;goal&gt;</span>add-test-source<span class="nt">&lt;/goal&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;sources&gt;</span>
+</span><span class="line">                                <span class="nt">&lt;source&gt;</span>${basedir}/parent/src/test/java<span class="nt">&lt;/source&gt;</span>
+</span><span class="line">                            <span class="nt">&lt;/sources&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;/configuration&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class="line">                <span class="nt">&lt;/executions&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/plugin&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/plugins&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/build&gt;</span>
+</span><span class="line">
+</span><span class="line">    ....
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/project&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>There are a few things you should know about this POM code:</p>
+
+<ol>
+  <li>The code here will be interpreted from the child project. That’s why all
+file references are using <code>${basedir}/parent</code> as the base directory.</li>
+  <li>You could also do this in the child projects POM. This will work exactly
+the same, but you would have to do this in every project inheriting from
+<code>parent</code>. There might be cases where this is desired, but usually it’s best
+to do this in the parent POM.</li>
+  <li>More complex projects – e.g. using generated source file, web applications
+and the like – require more complex configuration. As a rule of thumb
+there’s one thing to remember: The child project needs to know all files in
+the parent project that should be inherited. Sometimes there’s a built-in
+way to to this like <code>&lt;resources&gt;</code>, sometimes you’ll have to use a plugin
+like <code>org.codehaus.mojo:build-helper-maven-plugin</code> above.</li>
+</ol>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>It’s pretty obvious that Maven wasn’t created with Git submodules in mind, but
+this solution works quite well and I’m using it for a pretty big web
+application at work. There I have a custom framework for standard web
+applications and a web application that inherits from it. Building a new web
+application is quite easy: create a new Git repository, create a POM for the
+web application, include the framework submodule, use it as parent POM, build,
+done – at least when it comes to a working (although useless) web application.
+:)</p>
+
+<p>The most positive part of this layout is that you can add or fix things in the
+parent project without the need to build and install another artifact for
+<code>parent</code> before building the main project. It helps a lot to build up momentum
+in application development.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby: Calling super constructors from multiple included modules]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/"/>
+    <updated>2010-10-13T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules</id>
+    <content type="html"><![CDATA[<p>Ruby’s concept of modules and mixins is great. Every Ruby programmer will come
+to this conclusion – sooner or later.</p>
+
+<!-- more -->
+
+<p>There’s only one restriction that you may come across when working extensively
+with modules. Once you included several modules in another module or class you
+might still want to call constructors from multiple of this modules. Sadly
+Ruby’s <code>super</code> keyword won’t help you in this situation as it will only call
+one of the constructors. Once your class inherits from another class and
+includes two modules and you call super inside your class’ constructor, only
+<code>initialize</code> of the lastly included module will be called.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>Depending on your class and module hierarchy this might be completely fine. In
+some cases it’s nice to call multiple constructors<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>, though. Being in a mood
+to experiment, I tried to find the best way to call multiple constructors. The
+following code shows my final solution, which is a pretty simple and clean
+implementation of a “scoped <code>super</code>”.</p>
+
+<div><script src="https://gist.github.com/623674.js?file="></script>
+<noscript><pre><code>#!/usr/bin/env ruby
+#
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+
+module HelloWorld
+  def initialize
+    puts 'Hello World!'
+  end
+end
+
+module Weather
+  def initialize(how)
+    puts &quot;The weather is #{how}!&quot;
+  end
+end
+
+class SeeYou
+
+  include HelloWorld
+  include Weather
+
+  def initialize(how, sometime)
+    HelloWorld.instance_method(:initialize).bind(self).call
+    Weather.instance_method(:initialize).bind(self).call(how)
+
+    puts &quot;See you #{sometime}.&quot;
+  end
+
+end
+
+SeeYou.new('nice', 'soon')</code></pre></noscript></div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Ruby’s <code>super</code> is smart enough to check the arguments of the method
+   candidates it might call, so <code>super</code> might even skip one or more of the
+   super constructors.<a href="#fnref:1" rev="footnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Please note that this also applies to other methods, but it will be most
+   likely required for <code>initialize</code>.<a href="#fnref:2" rev="footnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using Git as a backup tool]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/10/02/using-git-as-a-backup-tool/"/>
+    <updated>2010-10-02T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/10/02/using-git-as-a-backup-tool</id>
+    <content type="html"><![CDATA[<p>Git is a great tool – not only for version control. Ever wondered what would
+happen to your local Git repositories you use to store private projects,
+documents or other arbitrary data after your hard drive crashes?<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> Most
+probably – if you don’t use any other means of backup – it will be lost:
+Surprise! No, not really, Git is based on plain files and there’s no way to
+recover from file corruption.<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> Therefore you should not forget to backup
+your Git repositories, too.</p>
+
+<p>If you use a Git host like <a href="https://github.com">GitHub</a> or <a href="http://gitorious.org">Gitorious</a> it’s pretty easy to
+have at least one additional repository to increase your data security. Once
+you added your online repository as a remote and pushed to it, you have a
+full<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup> copy of your repository contents at another location, elminitating
+your local hard drive as a single point of failure. But what about private
+repositories you don’t want (or you are not allowed to) host on a third-party
+server?</p>
+
+<!-- more -->
+
+<p>The most obvious solution is an own Git host, but this isn’t a simple task. You
+need the hardware (at least virtual on another physical host) and more
+importantly you need the knowledge to setup and maintain a Git server. To get
+the latter you may want to read <a href="http://progit.org/book/ch4-0.html">chapter 4</a> of Scott Chacon’s excellent book
+<a href="http://progit.org">Pro Git</a>. But nevertheless it’s time-consuming and most probably overkill
+to just have a secure backup copy of your repositories.</p>
+
+<p>A much simpler method is adequate for some ordinary backup scenarios – e.g.
+backing up to a local NAS (like a USB drive) or another network share (for
+example your private network drive on your company’s file server). These cases
+have in common that although data is stored on a remote hard drive, there’s no
+need to use a sophisticated network transport protocol – like Git’s own
+protocol or HTTP(S). Everything is transferred on top of the file system, that
+may be something like NFS, CIFS or AFP. So the heavy lifting is done by your
+operating system (or better, its file system implementation) and Git does not
+need to do anything special as the local file protocol is used. Therefore Git
+does not need to know anything about your infrastructure, hardware or whatever.
+So you don’t need to configure anything – aside from your remote(s). That’s
+why setting up Git backups is simple and even works when the underlying
+infrastructure changes.</p>
+
+<p>If you use Git for more than local storage you should be pretty comfortable
+with remotes. Although Git provides several options for remotes, like the refs
+that should be pushed and pulled. Configuring a remote for backup usage is even
+simpler: A backup repository is configured as a mirror remote:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git remote add --mirror backup /Volumes/Storage</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>That way, you don’t need to worry about what is pushed to this remote
+repository. Every branch and every tag is always pushed, even if the changes
+are non-forward. So you never have to worry if you forgot anything. The
+following will always result in a fully up-to-date remote repository:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git push backup</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Instead of the more lengthy alternative (<code>git push -f backup refs/*</code>).</p>
+
+<p>You see, backups using Git are pretty easy, but it’s getting even better.
+Instead of relying on a command to initiate an update of your backup(s), you
+most probably want to do this automatically. A good way to do this periodically
+is Unix’ cron or Windows’ scheduled tasks. Just configure the command above to
+be run inside your repositories at regular intervals.</p>
+
+<p>Another, more sophisticated way for automatic backups is using Git’s own hooks.
+Using e.g. the <code>post-commit</code> hook, you might update your backups every time you
+commit to your repository. That might seem to be a bit too much and depending
+on your repository contents and network speed pushing into your backup
+repository may really take some time. So you might want to tweak your hook, so
+that not every commit is pushed, but only some of them. You might check the
+timestamp or the contents of the commit or several other things – Git’s hooks
+can be a really mighty tool.</p>
+
+<p>Have a look at the following hooks to see some examples of automatically
+triggering a new backup:</p>
+
+<div><script src="https://gist.github.com/607502.js?file="></script>
+<noscript><pre><code>#!/bin/sh
+#
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+#
+# This is a demonstration hook that can be used to automatically update a
+# backup repository.
+#
+# Save this file as post-commit to the .git/hooks directory of a Git
+# repository and make it executable (`chmod u+x`). This will enable
+# automatic backups to a remote repository if the last commit is a specific
+# amount of time older than the current one. 
+
+# The timeout is the amount of seconds that the last commit has to be older
+# than the current one to trigger a new backup
+timeout=3600
+# The name of the remote repository to backup to. This should be a mirror
+# repository, i.e. remote.&lt;remote&gt;.mirror has to be true.
+remote=backup
+
+current_timeout=`git log -1 --pretty=format:%ct HEAD`
+last_timeout=`git log -1 --pretty=format:%ct HEAD^`
+diff=$[$current_timeout - $last_timeout]
+
+if [ $diff -gt $timeout ]
+  then git push $remote
+fi</code></pre></noscript></div>
+
+<p>Like said before, the hooks above are only samples of what can be done. They
+may be not that useful for your specific use case and infrastructure. But
+backing up using Git is practicable and does not need any special hardware or
+software (except Git of course). Additionally that way of backing up is even
+useful in pretty restricted enterprise architectures. On the other hand it may
+also fit the most complex infrastructures – I’m thinking of multiple Git
+repositories here, where one acts as some sort of proxy, automatically
+triggering backups to multiple other repository e.g. using a <code>post-receive</code>
+hook. You see… boundless possibilities.</p>
+
+<p>So you may find better ways to implement your own Git-based backup system –
+feel free to share them.</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>You don’t use Git to store things other than source code? Well, than
+   this post might demonstrate that it isn’t some strange nerd fetish to
+   store everything in a VCS repository. It’s a good way to not only store
+   data, but also store its history… securely.<a href="#fnref:1" rev="footnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Git’s SHA hashes will help Git to detect corruption of database objects,
+   but there’s no reliable, built-in way to recover from file corruption.
+   There exist <a href="http://stackoverflow.com/questions/801577/how-to-recover-git-objects-damaged-by-hard-disk-failure">ways</a> to recover corrupt objects, though. And this
+   method is neither reliable nor straightforward.<a href="#fnref:2" rev="footnote">&#8617;</a></p>
+    </li>
+    <li id="fn:3">
+      <p>If you push every branch and every tag, although pushing to another
+   repository will never include your stash and reflog.<a href="#fnref:3" rev="footnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Continuous integration using Git]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/08/16/continuous-integration-using-git/"/>
+    <updated>2010-08-16T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/08/16/continuous-integration-using-git</id>
+    <content type="html"><![CDATA[<p>Since <a href="http://blog.runcoderun.com">RunCodeRun</a> closed its doors I searched for a new way to
+automatically test my Ruby projects. As there are no other free CI services I
+know of, I had to come up with a solution myself.</p>
+
+<!-- more -->
+
+<p>This solution is – in fact – pretty easy: Write a Git hook that calls
+<code>rake test</code> everytime I commit. The result looks like that:</p>
+
+<div><script src="https://gist.github.com/527016.js?file="></script>
+<noscript><pre><code>#!/bin/sh
+#
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+#
+# This is a simple example to demonstrate continuous integration on top of
+# Git.
+#
+# Save this file to the .git/hooks directory of a (non-bare) Git repository and
+# make it executable (`chmod u+x`). It will enable Git-based continuous
+# integration using Ruby's Rake before committing. It will call `rake test` on
+# the source code in your repository and - based on the result of the tests -
+# deny or allow your commit.
+#
+# If you have a commit that will not pass your tests and should be allowed
+# though you need to call `git commit` with the `--no-verfiy` (`-n`) flag. You
+# may also used this hook as `post-commit` (for local repositories) or
+# `post-update` (for remotes) hook to have a behavior more similar to usual
+# continuous integration services - after committing and not before.
+
+rake test
+TEST_RESULT=$?
+
+if [ $TEST_RESULT -eq 0 ]
+  then echo &quot;Tests passed. Committing...&quot;
+  else echo &quot;Testing your changes has failed! Commit will be aborted.&quot;
+fi
+
+exit $TEST_RESULT</code></pre></noscript></div>
+
+<p>As you see this is a simple pre-commit hook. It just checks the result and will
+abort the commit. You might have other ideas to further improve this hook or
+make it usable as a post-commit or post-update hook (for remotes), but it’s a
+start nevertheless.</p>
+
+<p>To be honest using a pre-commit hook cannot really replace a full-blown
+continuous integration server like Hudson or CruiseControl – there’s no
+history, no traceable notifications (you might close your terminal without
+noticing that your commit failed) and most importantly a pre-commit hook isn’t
+really applicable to multiple developers working on one project. Using a
+post-update hook on a central repository might help with that, but a Git hook
+will never replace a real CI solution.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Highlighting Git "syntax" with nano]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/08/15/highlighting-git-syntax-with-nano/"/>
+    <updated>2010-08-15T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/08/15/highlighting-git-syntax-with-nano</id>
+    <content type="html"><![CDATA[<p>Using nano as your default editor for Git? Always wanted to have funky syntax
+highlighting just like that for Vim (e.g. shipped with msysgit).</p>
+
+<!-- more -->
+
+<p>Here’s a nanorc configuration file to enable syntax highlighting in nano:</p>
+
+<div><script src="https://gist.github.com/525257.js?file="></script>
+<noscript><pre><code># This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+
+# A nano configuration file to enable syntax highlighting of some Git specific
+# files with the GNU nano text editor (http://www.nano-editor.org)
+#
+# Save this file to a directory of your choice and add it to your nanorc using
+# include ${PATH_TO_THE_FILE}/git.nanorc
+
+# This syntax format is used for editing commit and tag messages
+syntax &quot;git commit/tag messages&quot; &quot;COMMIT_EDITMSG|TAG_EDITMSG&quot;
+
+# Commit message
+color white &quot;.*&quot;
+
+# Subject line (This is pretty weird, but it works at least for OS X' nano 2.0.6)
+color brightcyan start=&quot;^&quot; end=&quot;$&quot;
+
+# Comments
+color brightblack &quot;^#.*&quot;
+
+# Files changes
+color white       &quot;#[[:space:]](deleted|modified|new file|renamed):[[:space:]].*&quot;
+color red         &quot;#[[:space:]]deleted:&quot;
+color green       &quot;#[[:space:]]modified:&quot;
+color brightgreen &quot;#[[:space:]]new file:&quot;
+color brightblue  &quot;#[[:space:]]renamed:&quot;
+
+# Recolor hash symbols
+color brightblack &quot;#&quot;
+
+# Trailing spaces
+color ,red &quot;[[:space:]]+$&quot;
+              
+# This syntax format is used for interactive rebasing                 
+syntax &quot;git rebase todo&quot; &quot;git-rebase-todo&quot;
+
+# Default
+color white &quot;.*&quot;
+
+# Comments
+color brightblack &quot;^#.*&quot;
+
+# Commit IDs
+color brightwhite &quot;[0-9a-f]{7,40}&quot;
+
+# Rebase commands
+color green       &quot;^(e|edit) [0-9a-f]{7,40}&quot;
+color green       &quot;^#  (e, edit)&quot;
+color brightgreen &quot;^(f|fixup) [0-9a-f]{7,40}&quot;
+color brightgreen &quot;^#  (f, fixup)&quot;
+color brightwhite &quot;^(p|pick) [0-9a-f]{7,40}&quot;
+color brightwhite &quot;^#  (p, pick)&quot;
+color blue        &quot;^(r|reword) [0-9a-f]{7,40}&quot;
+color blue        &quot;^#  (r, reword)&quot;
+color brightred   &quot;^(s|squash) [0-9a-f]{7,40}&quot;
+color brightred   &quot;^#  (s, squash)&quot;
+color yellow      &quot;^(x|exec) [^ ]+ [0-9a-f]{7,40}&quot;
+color yellow      &quot;^#  (x &lt;cmd&gt;, exec &lt;cmd&gt;)&quot;
+
+# Recolor hash symbols
+color brightblack &quot;#&quot;
+</code></pre></noscript></div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A word on IDEs]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/08/11/a-word-on-ides/"/>
+    <updated>2010-08-11T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/08/11/a-word-on-ides</id>
+    <content type="html"><![CDATA[<p>What would be a good start for a blog about programming? I’ll start with IDEs.</p>
+
+<p>I won’t start off a fanboy war here. That wouldn’t be a good start for my blog
+I think. I just want to summarize my experiences with IDEs.</p>
+
+<!-- more -->
+
+<p>Let’s start with <a href="http://www.eclipse.org">Eclipse</a>. Anyone knows it, almost anyone has used it and
+most of them still use it. Eclipse is for IDEs what Windows is for operating
+systems – a quasi standard. To be honest I don’t like Eclipse. It’s a good IDE
+for sure – lots of useful plugins, lots of configuration options and so on.
+But it lacks real style – just like Windows ;). Even changing colors is a pain
+in the a** and I don’t like coding with a white background. Another downside of
+Eclipse for me is it’s pretty focused on Java development, although there are
+lots of plugins that integrate new languages, but it just doesn’t feel right –
+although there are other Eclipse-based IDEs like <a href="http://www.aptana.com/rails">RadRails</a> that have better
+support for other languages. On a side note Eclipse has a guite good support
+for Subversion, but when I switched to Git this bonus didn’t count anymore.</p>
+
+<p>Next one I tried was <a href="http://www.netbeans.org">NetBeans</a>. It has a more slick UI, but more or less it
+makes the same mistakes as Eclipse – but worse. :) At least when it comes to
+the integration of other languages or tools like Maven. But, and that’s a plus,
+it doesn’t feel like patchwork software, when you have lots of plugins
+installed. Nevertheless it always felt strange and so I used NetBeans as a mere
+editor while using the console to get other things done.</p>
+
+<p>My current IDE instead is JetBrains <a href="http://www.jetbrains.com/idea">IntelliJ</a> (for Java) and <a href="http://www.jetbrains.com/ruby">RubyMine</a>
+(for Ruby). The one real catch with JetBrains IDEs is that they aren’t free –
+there’s a community edition of IntelliJ and free trials for the other ones that
+are good for testing. If you’re into open source programming – like me –
+you’ll find it useful that JetBrains offers free licenses for open source
+projects which is really great. To make it short: JetBrains IDEs are just nice.
+They come full-featured for the language they are designed for (IntelliJ is are
+more general approach like Eclipse, although it is a Java IDE by design) and
+can be extended with lots of plugins. There are (working!) plugins for most of
+the common SCMs like Subversion and Git and even more exotic features like
+<a href="http://www.freemarker.org">Freemarker</a> support which make JetBrains IDEs really stand out.
+Additionally, there are several things that just work in JetBrains IDEs that
+gave me a headache in others, e.g. handling of line endings on different
+operating systems and code formatting. And I think all those small bits make it
+really comfortable to work.</p>
+
+<p>Right now I’m using IntelliJ and RubyMine for the development of
+<a href="http://koraktor.github.com/steam-condenser">Steam Condenser</a> and I’m waiting for another open source license for
+<a href="http://www.jetbrains.com/phpstorm">PhpStorm</a> as I’m using a simple editor for the PHP implementation. At the
+moment I can’t imagine changing my IDE again as I have never been so
+comfortable with one. So as a conclusion I just can recommend JetBrains IDEs.
+And no, I’m not paid for this. :)</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[$stdout << 'Hello world!']]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/08/10/stdout-hello-world/"/>
+    <updated>2010-08-10T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/08/10/stdout-hello-world</id>
+    <content type="html"><![CDATA[<p>Hello to everyone who found my blog and found time to read some of the posts.</p>
+
+<p>In this blog I’ll write small posts about programming and computer science in
+general – most likely Ruby, Git and other fancy stuff.</p>
+
+<p>I hope someone will find these useful or interesting.</p>
+]]></content>
+  </entry>
+  
+</feed>

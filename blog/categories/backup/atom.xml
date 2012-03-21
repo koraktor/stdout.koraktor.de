@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: backup | koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/blog/categories/backup/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Git as a backup tool]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/10/02/using-git-as-a-backup-tool/"/>
+    <updated>2010-10-02T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/10/02/using-git-as-a-backup-tool</id>
+    <content type="html"><![CDATA[<p>Git is a great tool – not only for version control. Ever wondered what would
+happen to your local Git repositories you use to store private projects,
+documents or other arbitrary data after your hard drive crashes?<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> Most
+probably – if you don’t use any other means of backup – it will be lost:
+Surprise! No, not really, Git is based on plain files and there’s no way to
+recover from file corruption.<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> Therefore you should not forget to backup
+your Git repositories, too.</p>
+
+<p>If you use a Git host like <a href="https://github.com">GitHub</a> or <a href="http://gitorious.org">Gitorious</a> it’s pretty easy to
+have at least one additional repository to increase your data security. Once
+you added your online repository as a remote and pushed to it, you have a
+full<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup> copy of your repository contents at another location, elminitating
+your local hard drive as a single point of failure. But what about private
+repositories you don’t want (or you are not allowed to) host on a third-party
+server?</p>
+
+<!-- more -->
+
+<p>The most obvious solution is an own Git host, but this isn’t a simple task. You
+need the hardware (at least virtual on another physical host) and more
+importantly you need the knowledge to setup and maintain a Git server. To get
+the latter you may want to read <a href="http://progit.org/book/ch4-0.html">chapter 4</a> of Scott Chacon’s excellent book
+<a href="http://progit.org">Pro Git</a>. But nevertheless it’s time-consuming and most probably overkill
+to just have a secure backup copy of your repositories.</p>
+
+<p>A much simpler method is adequate for some ordinary backup scenarios – e.g.
+backing up to a local NAS (like a USB drive) or another network share (for
+example your private network drive on your company’s file server). These cases
+have in common that although data is stored on a remote hard drive, there’s no
+need to use a sophisticated network transport protocol – like Git’s own
+protocol or HTTP(S). Everything is transferred on top of the file system, that
+may be something like NFS, CIFS or AFP. So the heavy lifting is done by your
+operating system (or better, its file system implementation) and Git does not
+need to do anything special as the local file protocol is used. Therefore Git
+does not need to know anything about your infrastructure, hardware or whatever.
+So you don’t need to configure anything – aside from your remote(s). That’s
+why setting up Git backups is simple and even works when the underlying
+infrastructure changes.</p>
+
+<p>If you use Git for more than local storage you should be pretty comfortable
+with remotes. Although Git provides several options for remotes, like the refs
+that should be pushed and pulled. Configuring a remote for backup usage is even
+simpler: A backup repository is configured as a mirror remote:</p>
+
+<p><code>
+git remote add --mirror backup /Volumes/Storage
+</code></p>
+
+<p>That way, you don’t need to worry about what is pushed to this remote
+repository. Every branch and every tag is always pushed, even if the changes
+are non-forward. So you never have to worry if you forgot anything. The
+following will always result in a fully up-to-date remote repository:</p>
+
+<p><code>
+git push backup
+</code></p>
+
+<p>Instead of the more lengthy alternative (<code>git push -f backup refs/*</code>).</p>
+
+<p>You see, backups using Git are pretty easy, but it’s getting even better.
+Instead of relying on a command to initiate an update of your backup(s), you
+most probably want to do this automatically. A good way to do this periodically
+is Unix’ cron or Windows’ scheduled tasks. Just configure the command above to
+be run inside your repositories at regular intervals.</p>
+
+<p>Another, more sophisticated way for automatic backups is using Git’s own hooks.
+Using e.g. the <code>post-commit</code> hook, you might update your backups every time you
+commit to your repository. That might seem to be a bit too much and depending
+on your repository contents and network speed pushing into your backup
+repository may really take some time. So you might want to tweak your hook, so
+that not every commit is pushed, but only some of them. You might check the
+timestamp or the contents of the commit or several other things – Git’s hooks
+can be a really mighty tool.</p>
+
+<p>Have a look at the following hooks to see some examples of automatically
+triggering a new backup:</p>
+
+<p><div><script src='https://gist.github.com/607502.js?file='></script>
+<noscript><pre><code>#!/bin/sh
+#
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+#
+# This is a demonstration hook that can be used to automatically update a
+# backup repository.
+#
+# Save this file as post-commit to the .git/hooks directory of a Git
+# repository and make it executable (`chmod u+x`). This will enable
+# automatic backups to a remote repository if the last commit is a specific
+# amount of time older than the current one. 
+
+# The timeout is the amount of seconds that the last commit has to be older
+# than the current one to trigger a new backup
+timeout=3600
+# The name of the remote repository to backup to. This should be a mirror
+# repository, i.e. remote.&lt;remote&gt;.mirror has to be true.
+remote=backup
+
+current_timeout=`git log -1 --pretty=format:%ct HEAD`
+last_timeout=`git log -1 --pretty=format:%ct HEAD^`
+diff=$[$current_timeout - $last_timeout]
+
+if [ $diff -gt $timeout ]
+  then git push $remote
+fi</code></pre></noscript></div>
+</p>
+
+<p>Like said before, the hooks above are only samples of what can be done. They
+may be not that useful for your specific use case and infrastructure. But
+backing up using Git is practicable and does not need any special hardware or
+software (except Git of course). Additionally that way of backing up is even
+useful in pretty restricted enterprise architectures. On the other hand it may
+also fit the most complex infrastructures – I’m thinking of multiple Git
+repositories here, where one acts as some sort of proxy, automatically
+triggering backups to multiple other repository e.g. using a <code>post-receive</code>
+hook. You see… boundless possibilities.</p>
+
+<p>So you may find better ways to implement your own Git-based backup system –
+feel free to share them.</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>You don’t use Git to store things other than source code? Well, than
+   this post might demonstrate that it isn’t some strange nerd fetish to
+   store everything in a VCS repository. It’s a good way to not only store
+   data, but also store its history… securely.<a href="#fnref:1" rev="footnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Git’s SHA hashes will help Git to detect corruption of database objects,
+   but there’s no reliable, built-in way to recover from file corruption.
+   There exist <a href="http://stackoverflow.com/questions/801577/how-to-recover-git-objects-damaged-by-hard-disk-failure">ways</a> to recover corrupt objects, though. And this
+   method is neither reliable nor straightforward.<a href="#fnref:2" rev="footnote">&#8617;</a></p>
+    </li>
+    <li id="fn:3">
+      <p>If you push every branch and every tag, although pushing to another
+   repository will never include your stash and reflog.<a href="#fnref:3" rev="footnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+</feed>

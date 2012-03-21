@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: general | koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/blog/categories/general/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[$stdout << 'Hello world!']]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/08/10/stdout-hello-world/"/>
+    <updated>2010-08-10T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/08/10/stdout-hello-world</id>
+    <content type="html"><![CDATA[<p>Hello to everyone who found my blog and found time to read some of the posts.</p>
+
+<p>In this blog I’ll write small posts about programming and computer science in
+general – most likely Ruby, Git and other fancy stuff.</p>
+
+<p>I hope someone will find these useful or interesting.</p>
+]]></content>
+  </entry>
+  
+</feed>

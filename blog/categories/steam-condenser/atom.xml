@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: steam-condenser | koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/blog/categories/steam-condenser/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[3² = 9: 3 years, 3 programming languages, 9 insights]]></title>
+    <link href="http://stdout.koraktor.de/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights/"/>
+    <updated>2011-08-18T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights</id>
+    <content type="html"><![CDATA[<p>Back in 2008 I started working on my first open-source project
+<a href="http://koraktor.de/steam-condenser">Steam Condenser</a>. I wanted to do something special, something that people
+would think about “Hey, that’s what I was looking for”. I’ve been a huge fan of
+Valve’s games, playing them myself and hosting a few servers for the German fan
+site <a href="http://www.hlportal.de">Half-Life Portal</a>, but that was before I started working on Steam
+Condenser. I knew there’s some need for libraries to query those game servers.
+Almost any clan has its web page presenting some of their servers, most of the
+time by using hacky PHP snippets out of game forums. So one of the special
+things I’d liked to do, was to create a more professional library: easy to use,
+extend and maintain. Another special would be to not only develop in one
+programming language, I did choose three right away: Java, PHP and Ruby.</p>
+
+<!-- more -->
+
+<p>The result of this three years of work is a stable and feature-rich library
+around Valve’s Steam service, able to query the game servers, the master
+servers and various Steam Community resources. The other result of this three
+years of work is the experience I gained, about the services Steam Condenser
+accesses, about the programming languages I used and about coding and software
+projects in general. The following nine statements are a my conclusion of Steam
+Condenser’s development so far:</p>
+
+<ol>
+  <li>
+    <h4 id="triple-the-languages-is-not-triple-the-work">Triple the languages is not triple the work</h4>
+    <p>Working with three programming languages isn’t easy. They all have their
+distinct features and shortcomings. Nevertheless, most of the work
+incorporated in programming is solving problems, not writing the solution
+down in code. This is especially true for a network and communication
+oriented project like Steam Condenser. The hardest part while working on
+the project was most probably the implementation of the various
+communication protocols which are sparsely documented. After the
+implementation was done for one language it was easy to adapt it to the
+others, especially after I created the basic classes which share a common
+API throughout all three languages. In the end, it’s a matter of adapting
+to different syntaxes and standard libraries.</p>
+  </li>
+  <li>
+    <h4 id="valves-apis-still-need-some-work">Valve’s APIs still need some work</h4>
+    <p>As most of the fans of Valve’s games know, Valve has a quite open and
+mutual relationship to their customers. They even started a wiki for
+developers called <a href="http://developer.valvesoftware.com">Valve Developer Community</a>. Nevertheless, the
+information has to be supplied by Valve at least somewhere before the
+community can document and discuss it in the wiki. The problem is pretty
+obvious for the different protocols used to communicate with the servers:
+The basics have been documented by Valve, but to really get to a point
+where everything works as expected, you need a few special tricks that
+aren’t mentioned anywhere by Valve. So experimenting and discussing with
+others is essential for a project like Steam Condenser.</p>
+  </li>
+  <li>
+    <h4 id="java-verbose-but-solid">Java: Verbose, but solid</h4>
+    <p>The Java port of Steam Condenser started as an experiment in socket
+programming. I did not do lots of Java programming before that, so I did
+learn a lot during the Java development of Steam Condenser. One important
+experience is that you’ll have to write a lot of code, more than in most of
+the other languages I used to date. But this code will be usually work like
+you expected, no pitfalls, no misinterpretations of the API and things like
+that. Java may look like a giant mess if your aren’t used to it, but it’s
+solid and – to an extend – very clean. That’s probably the reason why
+it’s one of the most successful programming languages at the moment,
+especially when it comes to enteprises.</p>
+  </li>
+  <li>
+    <h4 id="ruby-quick-without-being-dirty">Ruby: Quick without being dirty</h4>
+    <p>Ruby was in fact totally new to my when I started to work on Steam
+Condenser. I attended a lecture about Ruby on Rails back than and hadn’t
+done more than Rails samples and exercises. So working on the Ruby
+implementation of a more or less low-level library wasn’t quiet an easy
+start. In retrospect, beginning with a somewhat complex library to learn
+Ruby was some of the best decisions I made in my programming career. I
+learned a lot about Ruby and I learned to love it. Writing Ruby is pure
+fun, even the most complex constructs can written in a few lines of code
+and Ruby’s meta-programming capabilities will probably take your skills to
+a whole new level. Ruby is efficient and while the code might look a bit
+awkward to someone not used to it, it has it’s very own elegance. Another
+huge plus, and this is really huge, is Ruby’s strong and skilled community.
+Rails, Sinatra, Rake, Bundler, RVM, Travis CI… I could list countless
+libraries and tools build with Ruby that not only provide functionality to
+arbitrary users, but they also increased the strength of the community and
+the quality of the code and tools it creates.</p>
+  </li>
+  <li>
+    <h4 id="php-verbose-and-dirty">PHP: Verbose and dirty</h4>
+    <p>Before starting my work on Steam Condenser, I’ve already been an
+experienced PHP programmer, writing web applications and even a quite
+powerful framework for my company. So building Steam Condenser for PHP was
+not that hard for me, although I didn’t use lots of socket programming
+before. After three years working with PHP, Ruby and Java in parallel and
+getting in touch with all those different people using those languages I’ve
+come to a simple conclusion: PHP is a beginner’s language, just like it was
+for me. If you want to write high quality code, it gets extremely verbose
+and reduces readability a lot. The main problem here is that PHP is not
+object-oriented by design. There’s so much of the functional cruft even in
+the newest versions just to maintain backwards compatibility. On the other
+side you’re often confronted with beginner’s questions, for example how
+exception handling works. Don’t get me wrong, I learned a lot while
+programming PHP and I’m sure others did as well. So I don’t think that PHP
+is an inherently bad language, but its patchwork architecture and its
+scattered and discordant ecosystem are some kind of a show-stopper. The
+only advantage in this regard is the good compatibility and acceptance in
+the Windows universe.</p>
+  </li>
+  <li>
+    <h4 id="distributed-version-control-is-not-the-future-its-the-present">Distributed version control is not the future, it’s the present</h4>
+    <p>When starting with Steam Condenser (and all the time before that) I only
+used Subversion (SVN) as the version control for my private, universtity
+and work projects. I knew a bit about CVS and that was enough to not even
+think about using it. Besides of that I wasn’t very interested in version
+control systems. SVN worked well and I saw no obvious reason why to switch
+to a system I didn’t know more than its name. So I stayed with SVN and
+choose Google Code as my host. Later on I worked with several open-source
+projects wich used GitHub as their host. And as I thought that GitHub (see
+below) was way more useful than Google Code I started experimenting with
+Git (see below too). I noticed quickly that working with a DVCS is much
+more elegant and flexible than the centralized way of e.g. SVN. No need to
+setup a server, instant complete backups through clones, no need for
+network access while working, better possibilities to prepare, review and
+rework commits before (!) making them available for others. You see, the
+advantages are countless and after working a lot with Git I can’t imagine
+one downside of a distributed VCS that would justify the use of a
+centralized one.</p>
+  </li>
+  <li>
+    <h4 id="git-is-a-good-choice">Git is a good choice</h4>
+    <p>I’m biased when it comes to choose a good DVCS – just because I never used
+a different DVCS than Git. But with that in mind I can say that Git is easy
+to understand and to handle by someone migrating from a non-distributed
+VCS. And I’d also say that it should be easy to learn by someone who had
+never worked with a VCS ever before. Git’s basics are quite simple to
+learn, but provides additional features like the staging area, stashing and
+rebasing that a experienced Git user will never want to miss again. For
+more information on the advantages of Git see <a href="http://whygitisbetterthanx.com">whygitisbetterthanx.com</a>.</p>
+  </li>
+  <li>
+    <h4 id="github-is-in-fact-social-coding">GitHub is in fact social coding</h4>
+    <p>Like said above I started working with GitHub as a user of other
+open-source projects. It was a fun experience and even the design shows
+clearly that GitHub is not a simple code host as Google Code. This is even
+more true today. GitHub has evolved a lot in the last three years and
+features like the issue tracker and wiki work much better than they did for
+Google Code. And other things like pull requests are real killer features.
+It so easy to get in touch with users and other developers that it’s hard
+to not get truly involved into open-source. I failed and today I’m
+maintining open-source projects and contributing to others.</p>
+  </li>
+  <li>
+    <h4 id="open-source-is-great">Open-Source is great…</h4>
+    <p>… when you can manage to build up a community around your project. This
+is of course a developer’s point of view. As a user, open-source is always
+great. It’s free (at least as free as in beer), its code can be viewed by
+anyone and it can (at least) be altered for own uses. That makes an
+open-source project a lot more valuable to the user. And the user is more
+valuable to the developer. Any suggestion, bug report or other contribution
+– may it be in word or code form – is so important to any software
+project, that there’s no reason to not open-source your code as long as you
+don’t want to sell it.</p>
+  </li>
+</ol>
+
+<p>So that’s it: 3 years of coding in 3 different languages gives 9 conclusions
+about the project and software development in general. It has been a great time
+for me and I’m proud of what has been achieved in this time. I really hope that
+another three years will follow. With DOTA 2 and Counter-Strike: Global
+Offensive on the horizon there’s plenty of chance that Valve will continue to
+work on the Web API and I will try to keep up with Steam Condenser.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

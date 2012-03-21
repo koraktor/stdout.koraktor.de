@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: continuous-integration | koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/blog/categories/continuous-integration/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Continuous integration using Git]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/08/16/continuous-integration-using-git/"/>
+    <updated>2010-08-16T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/08/16/continuous-integration-using-git</id>
+    <content type="html"><![CDATA[<p>Since <a href="http://blog.runcoderun.com">RunCodeRun</a> closed its doors I searched for a new way to
+automatically test my Ruby projects. As there are no other free CI services I
+know of, I had to come up with a solution myself.</p>
+
+<!-- more -->
+
+<p>This solution is – in fact – pretty easy: Write a Git hook that calls
+<code>rake test</code> everytime I commit. The result looks like that:</p>
+
+<p><div><script src='https://gist.github.com/527016.js?file='></script>
+<noscript><pre><code>#!/bin/sh
+#
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+#
+# This is a simple example to demonstrate continuous integration on top of
+# Git.
+#
+# Save this file to the .git/hooks directory of a (non-bare) Git repository and
+# make it executable (`chmod u+x`). It will enable Git-based continuous
+# integration using Ruby's Rake before committing. It will call `rake test` on
+# the source code in your repository and - based on the result of the tests -
+# deny or allow your commit.
+#
+# If you have a commit that will not pass your tests and should be allowed
+# though you need to call `git commit` with the `--no-verfiy` (`-n`) flag. You
+# may also used this hook as `post-commit` (for local repositories) or
+# `post-update` (for remotes) hook to have a behavior more similar to usual
+# continuous integration services - after committing and not before.
+
+rake test
+TEST_RESULT=$?
+
+if [ $TEST_RESULT -eq 0 ]
+  then echo &quot;Tests passed. Committing...&quot;
+  else echo &quot;Testing your changes has failed! Commit will be aborted.&quot;
+fi
+
+exit $TEST_RESULT</code></pre></noscript></div>
+</p>
+
+<p>As you see this is a simple pre-commit hook. It just checks the result and will
+abort the commit. You might have other ideas to further improve this hook or
+make it usable as a post-commit or post-update hook (for remotes), but it’s a
+start nevertheless.</p>
+
+<p>To be honest using a pre-commit hook cannot really replace a full-blown
+continuous integration server like Hudson or CruiseControl – there’s no
+history, no traceable notifications (you might close your terminal without
+noticing that your commit failed) and most importantly a pre-commit hook isn’t
+really applicable to multiple developers working on one project. Using a
+post-update hook on a central repository might help with that, but a Git hook
+will never replace a real CI solution.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ide | koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/blog/categories/ide/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A word on IDEs]]></title>
+    <link href="http://stdout.koraktor.de/blog/2010/08/11/a-word-on-ides/"/>
+    <updated>2010-08-11T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2010/08/11/a-word-on-ides</id>
+    <content type="html"><![CDATA[<p>What would be a good start for a blog about programming? I’ll start with IDEs.</p>
+
+<p>I won’t start off a fanboy war here. That wouldn’t be a good start for my blog
+I think. I just want to summarize my experiences with IDEs.</p>
+
+<!-- more -->
+
+<p>Let’s start with <a href="http://www.eclipse.org">Eclipse</a>. Anyone knows it, almost anyone has used it and
+most of them still use it. Eclipse is for IDEs what Windows is for operating
+systems – a quasi standard. To be honest I don’t like Eclipse. It’s a good IDE
+for sure – lots of useful plugins, lots of configuration options and so on.
+But it lacks real style – just like Windows ;). Even changing colors is a pain
+in the a** and I don’t like coding with a white background. Another downside of
+Eclipse for me is it’s pretty focused on Java development, although there are
+lots of plugins that integrate new languages, but it just doesn’t feel right –
+although there are other Eclipse-based IDEs like <a href="http://www.aptana.com/rails">RadRails</a> that have better
+support for other languages. On a side note Eclipse has a guite good support
+for Subversion, but when I switched to Git this bonus didn’t count anymore.</p>
+
+<p>Next one I tried was <a href="http://www.netbeans.org">NetBeans</a>. It has a more slick UI, but more or less it
+makes the same mistakes as Eclipse – but worse. :) At least when it comes to
+the integration of other languages or tools like Maven. But, and that’s a plus,
+it doesn’t feel like patchwork software, when you have lots of plugins
+installed. Nevertheless it always felt strange and so I used NetBeans as a mere
+editor while using the console to get other things done.</p>
+
+<p>My current IDE instead is JetBrains <a href="http://www.jetbrains.com/idea">IntelliJ</a> (for Java) and <a href="http://www.jetbrains.com/ruby">RubyMine</a>
+(for Ruby). The one real catch with JetBrains IDEs is that they aren’t free –
+there’s a community edition of IntelliJ and free trials for the other ones that
+are good for testing. If you’re into open source programming – like me –
+you’ll find it useful that JetBrains offers free licenses for open source
+projects which is really great. To make it short: JetBrains IDEs are just nice.
+They come full-featured for the language they are designed for (IntelliJ is are
+more general approach like Eclipse, although it is a Java IDE by design) and
+can be extended with lots of plugins. There are (working!) plugins for most of
+the common SCMs like Subversion and Git and even more exotic features like
+<a href="http://www.freemarker.org">Freemarker</a> support which make JetBrains IDEs really stand out.
+Additionally, there are several things that just work in JetBrains IDEs that
+gave me a headache in others, e.g. handling of line endings on different
+operating systems and code formatting. And I think all those small bits make it
+really comfortable to work.</p>
+
+<p>Right now I’m using IntelliJ and RubyMine for the development of
+<a href="http://koraktor.github.com/steam-condenser">Steam Condenser</a> and I’m waiting for another open source license for
+<a href="http://www.jetbrains.com/phpstorm">PhpStorm</a> as I’m using a simple editor for the PHP implementation. At the
+moment I can’t imagine changing my IDE again as I have never been so
+comfortable with one. So as a conclusion I just can recommend JetBrains IDEs.
+And no, I’m not paid for this. :)</p>
+
+]]></content>
+  </entry>
+  
+</feed>

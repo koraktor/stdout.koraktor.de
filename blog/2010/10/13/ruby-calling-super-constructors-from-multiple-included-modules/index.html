@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ruby: Calling super constructors from multiple included modules - koraktor's $stdout</title>
+  <meta name="author" content="Sebastian Staudt">
+
+  
+  <meta name="description" content="Ruby’s concept of modules and mixins is great. Every Ruby programmer will come
+to this conclusion – sooner or later. There’s only one restriction &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stdout.koraktor.de/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="koraktor's $stdout" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-258817-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">koraktor's $stdout</a></h1>
+  
+    <h2>Random snippets about programming and more</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stdout.koraktor.de" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Ruby: Calling Super Constructors From Multiple Included Modules</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-13T00:00:00+02:00" pubdate data-updated="true">Oct 13<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Ruby’s concept of modules and mixins is great. Every Ruby programmer will come
+to this conclusion – sooner or later.</p>
+
+<!-- more -->
+
+<p>There’s only one restriction that you may come across when working extensively
+with modules. Once you included several modules in another module or class you
+might still want to call constructors from multiple of this modules. Sadly
+Ruby’s <code>super</code> keyword won’t help you in this situation as it will only call
+one of the constructors. Once your class inherits from another class and
+includes two modules and you call super inside your class’ constructor, only
+<code>initialize</code> of the lastly included module will be called.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>Depending on your class and module hierarchy this might be completely fine. In
+some cases it’s nice to call multiple constructors<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>, though. Being in a mood
+to experiment, I tried to find the best way to call multiple constructors. The
+following code shows my final solution, which is a pretty simple and clean
+implementation of a “scoped <code>super</code>”.</p>
+
+<div><script src="https://gist.github.com/623674.js?file="></script>
+<noscript><pre><code>#!/usr/bin/env ruby
+#
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2010, Sebastian Staudt
+
+module HelloWorld
+  def initialize
+    puts 'Hello World!'
+  end
+end
+
+module Weather
+  def initialize(how)
+    puts &quot;The weather is #{how}!&quot;
+  end
+end
+
+class SeeYou
+
+  include HelloWorld
+  include Weather
+
+  def initialize(how, sometime)
+    HelloWorld.instance_method(:initialize).bind(self).call
+    Weather.instance_method(:initialize).bind(self).call(how)
+
+    puts &quot;See you #{sometime}.&quot;
+  end
+
+end
+
+SeeYou.new('nice', 'soon')</code></pre></noscript></div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Ruby’s <code>super</code> is smart enough to check the arguments of the method
+   candidates it might call, so <code>super</code> might even skip one or more of the
+   super constructors.<a href="#fnref:1" rev="footnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Please note that this also applies to other methods, but it will be most
+   likely required for <code>initialize</code>.<a href="#fnref:2" rev="footnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Staudt</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-13T00:00:00+02:00" pubdate data-updated="true">Oct 13<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/programming/'>programming</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stdout.koraktor.de/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/" data-via="k0raktor" data-counturl="http://stdout.koraktor.de/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/10/02/using-git-as-a-backup-tool/" title="Previous Post: Using Git as a backup tool">&laquo; Using Git as a backup tool</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/" title="Next Post: Using a Git submodule as Maven parent project">Using a Git submodule as Maven parent project &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/08/18/3-9-3-years-3-programming-languages-9-insights/">3² = 9: 3 years, 3 programming languages, 9 insights</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/">Using a Git submodule as Maven parent project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/13/ruby-calling-super-constructors-from-multiple-included-modules/">Ruby: Calling super constructors from multiple included modules</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/02/using-git-as-a-backup-tool/">Using Git as a backup tool</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/08/16/continuous-integration-using-git/">Continuous integration using Git</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("k0raktor", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/k0raktor" class="twitter-follow-button" data-show-count="false">Follow @k0raktor</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109586181974940228820?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Sebastian Staudt -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

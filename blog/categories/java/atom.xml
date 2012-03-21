@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: java | koraktor's $stdout]]></title>
+  <link href="http://stdout.koraktor.de/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://stdout.koraktor.de/"/>
+  <updated>2012-03-22T00:28:41+01:00</updated>
+  <id>http://stdout.koraktor.de/</id>
+  <author>
+    <name><![CDATA[Sebastian Staudt]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using a Git submodule as Maven parent project]]></title>
+    <link href="http://stdout.koraktor.de/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project/"/>
+    <updated>2011-04-15T00:00:00+02:00</updated>
+    <id>http://stdout.koraktor.de/blog/2011/04/15/using-a-git-submodule-as-maven-parent-project</id>
+    <content type="html"><![CDATA[<p>This hint is especially useful if you have two Maven projects – a parent
+project and a child project depending on it – on which you want to develop
+concurrently.</p>
+
+<!-- more -->
+
+<p>The directory structure will look like this:</p>
+
+<p><code>
+_
+ \
+  project
+  |
+  |--.git--...
+  |
+  |--parent
+  |  |
+  |  |--.git--...
+  |  |
+  |  |--src
+  |  |  |
+  |  |  |--main
+  |  |  |  |
+  |  |  |  |--java--...
+  |  |  |  \--resources--...
+  |  |  |
+  |  |  \--test
+  |  |     |
+  |  |     |--java--...
+  |  |     \--resources--...
+  |  |
+  |  \--pom.xml
+  |
+  |--src
+  |  |
+  |  |--main
+  |  |  |
+  |  |  |--java-...
+  |  |  \--resources-...
+  |  |
+  |  \--test
+  |     |
+  |     |--java-...
+  |     \--resources-...
+  |
+  |--.gitmodules
+  \--pom.xml
+</code></p>
+
+<p>The most important part in the child project’s POM is assigning the parent
+project to the subfolder <code>parent</code> instead of using an installed artifact:</p>
+
+<p>```xml
+&lt;project …&gt;</p>
+
+<pre><code>...
+
+&lt;parent&gt;
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;parent&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;relativePath&gt;parent&lt;/relativePath&gt;
+&lt;/parent&gt;
+
+...
+</code></pre>
+
+<p>&lt;/project&gt;
+```</p>
+
+<p>What we have now, is a combination of two projects – called <code>project</code> and
+<code>parent</code>. Both reside in Git repositories, where <code>parent</code> is a submodule of
+<code>project</code>. On the Maven part, <code>project</code> inherits its POM – the so called super
+POM – from inside the folder <code>parent</code>. At this point, we have a basic setup
+where we can work on both projects, each in its own repository and the one
+inheriting from the other. <em>Basic</em> setup, because if you don’t do anything
+special in <code>parent</code>’s POM, you will only inherit dependencies and the
+like from this super POM. If you want to use code and files from the parent
+project, you’ll have to do a some more configuration in the parent POM.</p>
+
+<p>Also inheriting sources and resources requires a bit more work. The following
+snippet of the parent POM will allow the child project to use the most common
+source and resource files for runtime and tests from <code>parent</code>:</p>
+
+<p>```xml
+&lt;project …&gt;</p>
+
+<pre><code>&lt;groupId&gt;com.example&lt;/groupId&gt;
+&lt;artifactId&gt;parent&lt;/artifactId&gt;
+&lt;version&gt;1.0.0&lt;/version&gt;
+&lt;packaging&gt;pom&lt;/packaging&gt;
+
+...
+
+&lt;build&gt;
+    &lt;resources&gt;
+        &lt;resource&gt;
+            &lt;directory&gt;parent/src/main/resources&lt;/directory&gt;
+        &lt;/resource&gt;
+    &lt;/resources&gt;
+
+    &lt;testResources&gt;
+        &lt;testResource&gt;
+            &lt;directory&gt;parent/src/test/resources&lt;/directory&gt;
+        &lt;/testResource&gt;
+    &lt;/testResources&gt;
+
+    &lt;pugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+            &lt;artifactId&gt;build-helper-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;1.5&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;add-source&lt;/id&gt;
+                    &lt;phase&gt;generate-sources&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;add-source&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                        &lt;sources&gt;
+                            &lt;source&gt;${basedir}/parent/src/main/java&lt;/source&gt;
+                        &lt;/sources&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;add-test-resource&lt;/id&gt;
+                    &lt;phase&gt;generate-test-resources&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;add-test-resource&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                        &lt;resources&gt;
+                            &lt;resource&gt;
+                                &lt;directory&gt;${basedir}/parent/src/test/resources&lt;/directory&gt;
+                            &lt;/resource&gt;
+                        &lt;/resources&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;add-test-source&lt;/id&gt;
+                    &lt;phase&gt;generate-test-sources&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;add-test-source&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                        &lt;sources&gt;
+                            &lt;source&gt;${basedir}/parent/src/test/java&lt;/source&gt;
+                        &lt;/sources&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+
+....
+</code></pre>
+
+<p>&lt;/project&gt;
+```</p>
+
+<p>There are a few things you should know about this POM code:</p>
+
+<ol>
+  <li>The code here will be interpreted from the child project. That’s why all
+file references are using <code>${basedir}/parent</code> as the base directory.</li>
+  <li>You could also do this in the child projects POM. This will work exactly
+the same, but you would have to do this in every project inheriting from
+<code>parent</code>. There might be cases where this is desired, but usually it’s best
+to do this in the parent POM.</li>
+  <li>More complex projects – e.g. using generated source file, web applications
+and the like – require more complex configuration. As a rule of thumb
+there’s one thing to remember: The child project needs to know all files in
+the parent project that should be inherited. Sometimes there’s a built-in
+way to to this like <code>&lt;resources&gt;</code>, sometimes you’ll have to use a plugin
+like <code>org.codehaus.mojo:build-helper-maven-plugin</code> above.</li>
+</ol>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>It’s pretty obvious that Maven wasn’t created with Git submodules in mind, but
+this solution works quite well and I’m using it for a pretty big web
+application at work. There I have a custom framework for standard web
+applications and a web application that inherits from it. Building a new web
+application is quite easy: create a new Git repository, create a POM for the
+web application, include the framework submodule, use it as parent POM, build,
+done – at least when it comes to a working (although useless) web application.
+:)</p>
+
+<p>The most positive part of this layout is that you can add or fix things in the
+parent project without the need to build and install another artifact for
+<code>parent</code> before building the main project. It helps a lot to build up momentum
+in application development.</p>
+]]></content>
+  </entry>
+  
+</feed>
